@@ -1,0 +1,35 @@
+{
+  "name": "chatku-server",
+  "main": "src/index.ts",
+  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_date": "2026-07-15",
+  "build": {
+    "command": "npm run build"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "chatku-db",
+      "database_id": "PLACEHOLDER_D1_ID"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "KV",
+      "id": "PLACEHOLDER_KV_ID"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "R2",
+      "bucket_name": "chatku-media",
+      "preview_bucket_name": "chatku-media-preview"
+    }
+  ],
+  "vars": {
+    "APP_URL": "http://localhost:8787"
+  },
+  "observability": {
+    "enabled": true
+  }
+}
