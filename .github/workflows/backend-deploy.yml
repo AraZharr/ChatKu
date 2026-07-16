@@ -21,16 +21,13 @@ jobs:
         with:
           node-version: 20
           cache: npm
-          cache-dependency-path: server/package-lock.json
-
-      - name: Install Wrangler
-        run: npm install -g wrangler@4
+          cache-dependency-path: server/package.json
 
       - name: Install server deps
         working-directory: ./server
-        run: npm ci
+        run: npm install
 
-      - name: Build check
+      - name: TypeScript check
         working-directory: ./server
         run: npx tsc --noEmit
 
@@ -41,3 +38,5 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy
+        env:
+          NODE_ENV: production
