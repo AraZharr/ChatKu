@@ -10,13 +10,13 @@
     {
       "binding": "DB",
       "database_name": "chatku-db",
-      "database_id": "PLACEHOLDER_D1_ID"
+      "database_id": "b6acb9e2-9685-4407-8f47-d069e81e0435"
     }
   ],
   "kv_namespaces": [
     {
       "binding": "KV",
-      "id": "PLACEHOLDER_KV_ID"
+      "id": "190fa5bfa5f54466aeb7b342fd7eddb3"
     }
   ],
   "r2_buckets": [
