@@ -3,7 +3,10 @@ import { z } from "zod";
 import { AppEnv } from "../config/env";
 import { json } from "../utils/response";
 import { signJWT, requireAuth } from "../middleware/auth";
-import { hash, compare } from "bcryptjs";
+import bcrypt from "bcryptjs";
+
+const hashAsync = (s: string, rounds = 10) => bcrypt.hashAsync(s, rounds);
+const compareAsync = (s: string, h: string) => bcrypt.compareAsync(s, h);
 import type { User, Message } from "../types";
 
 const app = new Hono<{ Bindings: AppEnv }>();

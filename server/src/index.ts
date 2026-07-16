@@ -1,4 +1,4 @@
-import { AppEnv } from "./config/env";
+import { AppEnv } from "../config/env";
 import api from "./routes";
 
 export default {
@@ -18,3 +18,4 @@ export default {
     return new Response("Not found", { status: 404 });
   },
 } satisfies ExportedHandler<AppEnv>;
+
