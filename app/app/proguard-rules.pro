@@ -1,0 +1,3 @@
+-keep class com.chatku.** { *; }
+-keep class kotlinx.serialization.** { *; }
+-dontwarn org.slf4j.**

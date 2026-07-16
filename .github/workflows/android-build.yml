@@ -1,0 +1,63 @@
+name: Build ChatKu Android
+on:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - ".github/workflows/android-build.yml"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+      KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      KEY_STORE_PASSWORD: ${{ secrets.KEY_STORE_PASSWORD }}
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          api-level: 34
+          build-tools: 34.0.0
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Restore keystore
+        if: env.KEYSTORE_BASE64 != ''
+        run: |
+          mkdir -p app/keystore
+          echo "$KEYSTORE_BASE64" | base64 -d > app/keystore/release.jks
+          echo "keystoreFile=app/keystore/release.jks" >> app/gradle.properties
+
+      - name: Decode keystore properties
+        if: env.KEYSTORE_BASE64 != ''
+        run: |
+          echo "storePassword=$KEY_STORE_PASSWORD" >> app/gradle.properties
+          echo "keyPassword=$KEY_PASSWORD" >> app/gradle.properties
+          echo "keyAlias=$KEY_ALIAS" >> app/gradle.properties
+          echo "storeFile=release.jks" >> app/gradle.properties
+
+      - name: Build release APK
+        working-directory: ./app
+        run: ./gradlew assembleRelease --no-daemon --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: chatku-release
+          path: app/build/outputs/apk/release/*.apk
+          retention-days: 14
